@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 
@@ -48,7 +49,7 @@ public class AuthenticationService {
                 new CustomAuthenticationToken(
                         loginDto.getUsername(),
                         loginDto.getPassword(),
-                        null
+                        new ArrayList<>()
                 )
         );
 

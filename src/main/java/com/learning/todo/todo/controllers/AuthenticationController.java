@@ -2,7 +2,7 @@ package com.learning.todo.todo.controllers;
 
 import com.learning.todo.todo.dto.AuthLoginDto;
 import com.learning.todo.todo.dto.AuthRegisterDto;
-import com.learning.todo.todo.dto.LoginResponse;
+import com.learning.todo.todo.dto.LoginResponseDto;
 import com.learning.todo.todo.entity.User;
 import com.learning.todo.todo.service.AuthenticationService;
 import com.learning.todo.todo.service.JwtService;
@@ -45,14 +45,14 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody AuthLoginDto loginUserDto) {
+    public ResponseEntity<LoginResponseDto> authenticate(@RequestBody AuthLoginDto loginUserDto) {
         User authenticatedUser = authenticationService.authenticate(loginUserDto);
         UserDetails userDetails = userService.loadUserByUsername(authenticatedUser.getUsername());
         HashMap<String, Object> extras = new HashMap<>();
         extras.put("roles", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         String jwtToken = jwtService.generateToken(extras, userDetails);
 
-        LoginResponse loginResponse = LoginResponse
+        LoginResponseDto loginResponse = LoginResponseDto
                 .builder()
                 .token(jwtToken)
                 .expiresIn(jwtService.getExp())
